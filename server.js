@@ -10,7 +10,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
 
 app.post("/api/contact", async (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, message, website } = req.body;
+
+  if (website && website.trim()) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Requête suspecte détectée." });
+  }
 
   if (!name || !email || !message) {
     return res
