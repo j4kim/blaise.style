@@ -8,7 +8,6 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
-app.use(express.static(path.join(__dirname)));
 
 app.post("/api/contact", async (req, res) => {
   const { name, email, message } = req.body;
@@ -26,12 +25,10 @@ app.post("/api/contact", async (req, res) => {
   const contactEmail = process.env.CONTACT_EMAIL;
 
   if (!smtpHost || !smtpPort || !smtpUser || !smtpPass || !contactEmail) {
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "La configuration SMTP est manquante.",
-      });
+    return res.status(500).json({
+      success: false,
+      message: "La configuration SMTP est manquante.",
+    });
   }
 
   const transporter = nodemailer.createTransport({
@@ -59,13 +56,11 @@ app.post("/api/contact", async (req, res) => {
     res.json({ success: true, message: "Message envoyé avec succès." });
   } catch (error) {
     console.error("SMTP Error:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message:
-          "Impossible d’envoyer le message. Vérifiez la configuration SMTP.",
-      });
+    res.status(500).json({
+      success: false,
+      message:
+        "Impossible d’envoyer le message. Vérifiez la configuration SMTP.",
+    });
   }
 });
 
